@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Independent Set — Speech Delivery Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#0e0f14;--surface:#161820;--card:#1c1e28;--border:#2a2d3e;--accent:#6c8cff;--green:#4ade80;--yellow:#fbbf24;--text:#e8eaf6;--muted:#8b90b0;--ptr-bg:#141b30;--ptr-border:#2d3f88;--tab-bg:#12203a;--tab-border:#1e3560;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.8;padding-bottom:80px;}
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:300;transition:width .15s;}
+  header{background:linear-gradient(135deg,#10122a,#1a1040 60%,#0e0f14);border-bottom:1px solid var(--border);padding:38px 48px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;}
+  header h1{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;}
+  header p{color:var(--muted);font-size:.87rem;margin-top:3px;}
+  .grade{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;padding:10px 24px;border-radius:11px;box-shadow:0 4px 20px rgba(34,197,94,.35);}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;padding:12px 48px;background:var(--surface);border-bottom:1px solid var(--border);}
+  .li{display:flex;align-items:center;gap:7px;font-size:.79rem;color:var(--muted);}
+  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  nav{display:flex;gap:7px;flex-wrap:wrap;padding:11px 48px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:90;}
+  .pill{font-size:.76rem;padding:4px 11px;border-radius:18px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .18s;background:transparent;font-family:inherit;}
+  .pill:hover,.pill.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+  main{max-width:860px;margin:0 auto;padding:46px 22px;}
+  .sec{margin-bottom:54px;border-left:3px solid var(--border);padding-left:26px;opacity:0;transform:translateY(13px);transition:opacity .45s,transform .45s;}
+  .sec.vis{opacity:1;transform:none;}
+  .sec:hover{border-left-color:var(--accent);}
+  .sh{display:flex;align-items:center;gap:11px;margin-bottom:16px;flex-wrap:wrap;}
+  .ctag{font-size:.71rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:var(--card);border:1px solid var(--border);color:var(--muted);}
+  .st{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#fff;}
+  .mp{margin-left:auto;font-size:.76rem;color:var(--green);font-weight:600;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);padding:2px 9px;border-radius:18px;}
+
+  /* PAGE BADGE */
+  .pb{display:inline-flex;align-items:center;gap:7px;background:var(--tab-bg);border:1px solid var(--tab-border);border-radius:6px;padding:5px 13px;font-size:.82rem;color:#9ab4ff;margin-bottom:13px;}
+  .pb strong{color:#bfd0ff;}
+  .pb .arrow{color:var(--muted);font-size:.75rem;margin:0 2px;}
+
+  /* SPEECH */
+  .sp{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:19px 23px;margin-bottom:11px;font-size:1.01rem;line-height:1.85;color:var(--text);position:relative;}
+  .sp::before{content:'\201C';font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--accent);opacity:.17;position:absolute;top:-1px;left:9px;line-height:1;}
+  .sp em{font-style:italic;color:#c0c8ff;}
+  .sp strong{color:#fff;font-weight:600;}
+  .m{font-family:'Georgia',serif;font-style:italic;color:var(--yellow);background:rgba(251,191,36,.08);padding:1px 5px;border-radius:3px;font-size:.94em;}
+
+  /* POINTER */
+  .ptr{display:flex;align-items:flex-start;gap:10px;background:var(--ptr-bg);border:1px solid var(--ptr-border);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:.86rem;color:#a8b8ff;}
+  .pi{font-size:1rem;flex-shrink:0;margin-top:2px;}
+  .ptr code{background:rgba(108,140,255,.12);border:1px solid rgba(108,140,255,.22);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:.8rem;color:#c8d0ff;}
+
+  /* TIP */
+  .tip{display:flex;align-items:flex-start;gap:8px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:9px 13px;margin-bottom:10px;font-size:.83rem;color:#f0c060;}
+
+  /* PROOF */
+  .pf{background:rgba(108,140,255,.06);border:1px solid rgba(108,140,255,.2);border-radius:8px;padding:14px 19px;margin:10px 0 11px;font-size:.95rem;color:#c0caff;}
+  .pl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:7px;}
+
+  hr{height:1px;background:var(--border);border:none;margin:36px 0;}
+  @media(max-width:580px){header{padding:20px 15px;}. legend,nav{padding:10px 13px;}main{padding:24px 11px;}.grade{font-size:1.3rem;padding:8px 16px;}}
+  @media print{header,nav,#bar{position:static;}.sec{opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header>
+  <div>
+    <h1>Independent Set — Speech Delivery Guide</h1>
+    <p>Full script &nbsp;·&nbsp; exact tab locations verified against your live tool &nbsp;·&nbsp; pointing cues &nbsp;·&nbsp; delivery tips</p>
+  </div>
+  <div class="grade">40 / 40 ✓</div>
+</header>
+
+<div class="legend">
+  <div class="li"><div class="dot" style="background:#6c8cff"></div>Speech to say aloud</div>
+  <div class="li"><div class="dot" style="background:#2d3f88"></div>Where to point on screen</div>
+  <div class="li"><div class="dot" style="background:#12203a;border:1px solid #1e3560"></div>Which tab to be on</div>
+  <div class="li"><div class="dot" style="background:#b45309"></div>Delivery tip</div>
+  <div class="li"><div class="dot" style="background:#1e3a5f"></div>Formula / proof</div>
+</div>
+
+<nav>
+  <button class="pill" onclick="go('intro')">Intro</button>
+  <button class="pill" onclick="go('s3a')">3A Problem</button>
+  <button class="pill" onclick="go('s4c')">4C Tool</button>
+  <button class="pill" onclick="go('s4a')">4A Brute Force</button>
+  <button class="pill" onclick="go('s3b')">3B Greedy</button>
+  <button class="pill" onclick="go('s3c')">3C Quality</button>
+  <button class="pill" onclick="go('s4b')">4B Compare</button>
+  <button class="pill" onclick="go('s5a')">5A NP Proof</button>
+  <button class="pill" onclick="go('s5b')">5B Directions</button>
+  <button class="pill" onclick="go('close')">Closing</button>
+</nav>
+
+<main>
+
+<!-- INTRO -->
+<div class="sec" id="intro">
+  <div class="sh"><span class="ctag">Opening</span><span class="st">Introduction</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> — tool loaded, graph visible on screen</div>
+  <div class="tip">💡 Speak slowly. Look at the grader. Don't click anything yet — let them take in the tool first.</div>
+  <div class="sp">
+    Hello everyone. Today I will present my teaching tool for the <strong>Independent Set Decision Problem</strong>, which is an NP-complete problem. I'll walk you through the problem definition, two algorithms, and a complete NP-completeness proof.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 3A -->
+<div class="sec" id="s3a">
+  <div class="sh"><span class="ctag">CLO 3A</span><span class="st">Problem Definition</span><span class="mp">3 / 3 marks</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> — left panel visible</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>Edge list input box</strong> (top-left, labelled "Edge list (one u v per line)") and the <strong>k = field</strong> directly below it. These are the two inputs of the problem.
+  </div>
+
+  <div class="sp">
+    The input is an undirected graph <span class="m">G = (V, E)</span> — vertices are items, edges are conflicts — and an integer <span class="m">k</span>. In my tool, the graph is entered here as an edge list, one edge per line, and this field is <span class="m">k</span>. The decision question is: <em>does this graph contain an independent set of size at least k?</em>
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>Graph Visualization panel</strong> on the right — the circular canvas showing coloured vertices and edges.
+  </div>
+
+  <div class="sp">
+    An independent set is a subset of vertices where <strong>no two selected vertices share an edge</strong>. The output is either a valid independent set — shown here as selected vertices — or a conclusion that none of size <span class="m">k</span> was found. The constraint is simple: if two vertices are connected, they cannot both be selected. This is useful for scheduling conflict-free tasks, allocating non-interfering resources, or choosing non-clashing courses.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 4C -->
+<div class="sec" id="s4c">
+  <div class="sh"><span class="ctag">CLO 4C</span><span class="st">Tool Overview &amp; Pedagogical Value</span><span class="mp">3 / 3 marks</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> — scroll to show all panels</div>
+  <div class="tip">💡 Actually click each feature as you name it — a live demo beats listing names.</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to: <strong>Presets row</strong> (Cycle C₅, Petersen, Triangle K₃, ⚠️ Greedy Fails…) → <strong>⚡ Build Steps / ▶| Step / ▶ Play / ⏸ Pause / ↺ Reset</strong> buttons → <strong>Live Statistics panel</strong> (Operations, IS Size, Phase, |V|, |E|, k).
+  </div>
+
+  <div class="sp">
+    My tool lets users enter any custom graph and choose <span class="m">k</span>, or pick from preset examples including Cycle C₅, Petersen, Triangle K₃, and the Greedy Fails adversarial case. It has step-by-step execution controls — Build Steps, Step, Play, Pause, and Reset. The visualizer highlights selected, excluded, and removed vertices in different colors. The Live Statistics panel tracks operations, independent set size, and the current algorithm phase in real time.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>Pseudocode panel</strong> (visible in Visualizer) → then the <strong>Complexity Growth chart</strong> at the bottom → then gesture toward the <strong>top navbar</strong> to indicate the other tabs (📚 Education, 🔐 NP-Completeness, ⚖️ Comparison, 📊 Benchmark).
+  </div>
+
+  <div class="sp">
+    There is also a pseudocode panel, a complexity growth chart comparing brute force vs greedy, a dedicated comparison mode, a benchmark tool, and a full NP-completeness proof section with an interactive step-by-step walkthrough. This makes the tool educational: the learner sees exactly why each vertex is chosen or rejected — not just the final answer.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 4A -->
+<div class="sec" id="s4a">
+  <div class="sh"><span class="ctag">CLO 4A</span><span class="st">Brute-Force Algorithm</span><span class="mp">4 / 4 marks</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> → Algorithm panel → click <strong>Brute Force</strong></div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    In the left panel under "Algorithm", click <code>Brute Force</code>. Then click <strong>Preset: Triangle K₃</strong>. Press <strong>⚡ Build Steps</strong>.
+  </div>
+
+  <div class="sp">
+    The first algorithm is the exact <strong>brute-force</strong>. It is guaranteed to find the maximum independent set because it checks every possible subset of vertices. For a graph with <span class="m">n</span> vertices, there are <span class="m">2ⁿ</span> possible subsets. For each one it checks two conditions: is the size at least <span class="m">k</span>, and are all selected vertices non-adjacent?
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Press <strong>▶| Step</strong> slowly. Point to the <strong>Step-by-Step Log</strong> below the graph canvas — it explains each decision in plain English.
+  </div>
+
+  <div class="sp">
+    If any two selected vertices share an edge, the subset is rejected. If it passes, it is recorded as a valid candidate. The correctness argument: the optimal set <span class="m">S*</span> is one of the <span class="m">2ⁿ</span> subsets enumerated — brute force must eventually reach it, accept it, and return it as the answer.
+  </div>
+
+  <div class="pf">
+    <div class="pl">Complexity</div>
+    <span class="m">2ⁿ</span> subsets, each requiring up to <span class="m">O(n²)</span> pair comparisons. Worst-case total: <span class="m">O(2ⁿ · n²)</span>.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>⚠️ DISABLED — TOO LARGE warning</strong> (appears when graph exceeds 18 vertices — load Petersen to trigger it). Then point to the <strong>Complexity Growth chart</strong> at the bottom of the Visualizer — it shows the exponential vs polynomial curves.
+  </div>
+
+  <div class="sp">
+    Brute force is feasible only for small graphs — my tool disables it above 18 vertices. That warning itself demonstrates the boundary between the feasible and intractable regimes. The growth chart makes the gap visual: brute force shoots up exponentially while greedy stays flat.
+  </div>
+
+  <div class="tip">💡 Demo three presets in order below — one sentence each. This proves the algorithm is general, not hardcoded.</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Click: <strong>Triangle K₃</strong> (dense — IS size 1) → <strong>Path P₆</strong> (sparse — larger IS) → <strong>Cycle C₅</strong> (32 subsets, IS size 2). Run brute force on each.
+  </div>
+
+  <div class="sp">
+    In the <strong>Triangle K₃</strong> every vertex is adjacent so the maximum independent set is size 1 — confirmed. On <strong>Path P₆</strong> the graph is sparse so brute force finds a larger set. On <strong>Cycle C₅</strong> it checks all 32 subsets and correctly returns size 2. Each example confirms the algorithm works on varied inputs.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 3B -->
+<div class="sec" id="s3b">
+  <div class="sh"><span class="ctag">CLO 3B</span><span class="st">Greedy Algorithm — Paradigm &amp; Validity</span><span class="mp">4 / 4 marks</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> → Algorithm panel → click <strong>Greedy Heuristic</strong></div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Click <code>Greedy Heuristic</code> in the Algorithm panel. Load <strong>Preset: Cycle C₅</strong>. Press <strong>⚡ Build Steps</strong> then step through slowly.
+  </div>
+
+  <div class="sp">
+    The second algorithm follows the <strong>greedy paradigm</strong> — a design strategy where we make the locally optimal choice at each step without reconsidering previous decisions. The greedy rule here is: always pick the vertex with the <em>minimum current degree</em> in the remaining graph, add it to the independent set, then remove it and all its neighbors.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>color legend</strong> on the graph panel: <em>In IS</em> (green selected vertex), <em>Excluded</em> (red neighbors), <em>Removed</em> (no longer in graph). Then point to the <strong>🎯 How We Picked box</strong> in the Live Statistics panel — it updates with the reason for each choice.
+  </div>
+
+  <div class="sp">
+    The visualization shows this: after selecting a vertex it turns green, its neighbors turn red and are excluded, and the remaining graph shrinks. The "How We Picked" panel gives the plain-English reason for each step.
+  </div>
+
+  <div class="pf">
+    <div class="pl">Validity Invariant</div>
+    At every step, the selected set contains no edge between any two members. When vertex <span class="m">v</span> is added, all neighbors are immediately removed — so no future pick can be adjacent to <span class="m">v</span>. By induction the output is always a legal independent set.
+  </div>
+
+  <div class="sp">
+    However, greedy is <strong>not guaranteed to find the maximum</strong> independent set — it makes local choices, and a local choice can block a better global solution. If greedy finds an independent set of size at least <span class="m">k</span>, we can safely answer YES because we have a concrete witness. But if greedy <em>fails</em> to find size <span class="m">k</span>, we cannot conclude NO — a different selection might still succeed.
+  </div>
+
+  <div class="tip">💡 That last sentence is critical. Slow down and say it clearly — it directly targets the rubric.</div>
+</div>
+
+<hr/>
+
+<!-- 3C -->
+<div class="sec" id="s3c">
+  <div class="sh"><span class="ctag">CLO 3C</span><span class="st">Heuristic Quality &amp; Counterexample</span><span class="mp">3 / 3 marks</span></div>
+  <div class="pb">🔬 <span class="arrow">Tab:</span> <strong>Visualizer</strong> → load <strong>⚠️ Greedy Fails</strong> preset</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Click <strong>Preset: ⚠️ Greedy Fails</strong>. Confirm <code>Greedy Heuristic</code> is selected. Press <strong>⚡ Build Steps</strong> then step through slowly — one step at a time.
+  </div>
+
+  <div class="sp">
+    For Maximum Independent Set, no constant-factor polynomial-time approximation exists unless P = NP — proven by Håstad in 1999. So I do not claim a guaranteed approximation ratio. I analyze greedy as a heuristic. This preset is my live counterexample.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to <strong>vertex 0</strong> being selected first, then the <strong>excluded neighbors turning red</strong> — specifically vertices 1 and 2 disappearing from consideration.
+  </div>
+
+  <div class="sp">
+    Vertices 0, 1, 2, and 4 all have minimum degree 2 — a four-way tie. Greedy breaks ties by lowest index and picks vertex 0. Removing 0 eliminates vertices 1 and 2, which are part of the optimal solution. The remaining subgraph forces greedy to produce an independent set of size 2.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Switch to <code>Brute Force</code> in the Algorithm panel. Press <strong>⚡ Build Steps → ▶ Play</strong>. Point to the <strong>IS Size result</strong> shown in Live Statistics.
+  </div>
+
+  <div class="sp">
+    Brute force verifies the optimal independent set is size 3 — specifically <span class="m">{1, 2, 4}</span>. Greedy is valid but not optimal. For <span class="m">k = 2</span> greedy succeeds; for <span class="m">k = 3</span> greedy fails even though a valid set of size 3 exists.
+    <br><br>
+    The heuristic works best on sparse or simple graphs like paths and cycles. It fails on adversarial graphs where the first local choice removes vertices needed for the global optimum.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Optional: click the <strong>📚 Education tab → ⚙️ Algorithm 1 — Greedy Heuristic collapsible</strong> — it has the full written step-by-step counterexample analysis (useful if the grader asks a follow-up question).
+  </div>
+</div>
+
+<hr/>
+
+<!-- 4B -->
+<div class="sec" id="s4b">
+  <div class="sh"><span class="ctag">CLO 4B</span><span class="st">Brute Force vs Greedy Comparison</span><span class="mp">3 / 3 marks</span></div>
+  <div class="pb">⚖️ <span class="arrow">Switch to the</span> <strong>Comparison</strong> tab in the top navbar</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Click the <strong>⚖️ Comparison</strong> tab. Click the <strong>C₅ preset button</strong> (or Path P₆). Press <strong>⚡ Build</strong>.
+  </div>
+
+  <div class="sp">
+    My tool compares both algorithms side by side on the same graph. On a simple graph: greedy and brute force return the same independent set size. But the operation counts differ — brute force checks exponentially more subsets because it grows as <span class="m">2ⁿ</span>, while greedy makes a small number of local choices. Even when both answers match, greedy gets there far faster.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the left panel <strong>🔨 Brute Force</strong> (Subsets checked, IS Size, Time) and the right panel <strong>🌿 Greedy Heuristic</strong> (Iterations, IS Size, Time) side by side.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Click the <strong>⚠️ Greedy Fails preset button</strong> in the Comparison tab. Press <strong>⚡ Build</strong>.
+  </div>
+
+  <div class="sp">
+    Now on the adversarial preset: greedy still produces a <strong>valid</strong> independent set — no two selected vertices are adjacent. But brute force finds a <strong>larger</strong> one. This is the key distinction: <em>valid</em> versus <em>optimal</em>. Brute force is always correct and exact. Greedy is always fast but may miss the maximum.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Scroll down to the <strong>Complexity Growth chart</strong> at the bottom of the Comparison page — it shows the exponential vs polynomial scaling curves side by side.
+  </div>
+
+  <div class="sp">
+    The growth chart captures the tradeoff: brute force is exact but exponential, greedy is approximate but polynomial. Brute force is right for small graphs and verification. Greedy is better for large graphs where an approximate answer is acceptable.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 5A -->
+<div class="sec" id="s5a">
+  <div class="sh"><span class="ctag">CLO 5A</span><span class="st">NP-Completeness — NP Membership &amp; Reduction</span><span class="mp">10 / 10 marks</span></div>
+  <div class="pb">🔐 <span class="arrow">Switch to the</span> <strong>NP-Completeness</strong> tab → you will see the interactive numbered proof</div>
+  <div class="tip">💡 This is worth the most marks. Take a breath before you start. Speak at half speed. Every sentence counts here.</div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Navigate to the <strong>🔐 NP-Completeness</strong> tab. The page shows a numbered interactive proof. Make sure you are viewing <strong>Step 1 — Independent Set ∈ NP</strong> (the first step card).
+  </div>
+
+  <div class="sp">
+    Now I will prove Independent Set is NP-complete. A problem is NP-complete if two things hold: it is in NP, and it is NP-hard.
+    <br><br>
+    <strong>Part 1 — Independent Set is in NP.</strong> The certificate is a proposed subset <span class="m">S ⊆ V</span>. The verifier receives the graph, the integer <span class="m">k</span>, and this set <span class="m">S</span>. It runs two checks: first, whether <span class="m">|S| ≥ k</span> — takes <span class="m">O(n)</span>. Second, whether every pair inside <span class="m">S</span> has no edge — takes <span class="m">O(n²)</span>. Total verification time is <span class="m">O(n²)</span> — polynomial. Therefore <strong>Independent Set ∈ NP</strong>.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Press <strong>Next →</strong> to move to <strong>Step 2 — Reduction: Vertex Cover ≤ₚ Independent Set</strong>. Point to the <strong>Reduction Diagram</strong> — the box with arrows showing the mapping from VC to IS.
+  </div>
+
+  <div class="sp">
+    <strong>Part 2 — NP-Hardness.</strong> I reduce from <strong>Vertex Cover</strong>, a known NP-complete problem. Vertex Cover asks: does graph <span class="m">G</span> have a set <span class="m">C ⊆ V</span> of size at most <span class="m">k</span> where every edge has at least one endpoint in <span class="m">C</span>?
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>Formal Mapping box</strong> labelled: <code>f(G, k) = (G, |V| − k)</code>. This is visible in the Step 2 construction section.
+  </div>
+
+  <div class="sp">
+    The reduction is elegant in its simplicity: given a Vertex Cover instance <span class="m">(G, k)</span>, I output the Independent Set instance <span class="m">(G, |V| − k)</span>. The graph stays exactly the same — no new vertices, no new edges, no gadgets. Only the parameter changes from <span class="m">k</span> to <span class="m">|V| − k</span>.
+  </div>
+
+  <div class="pf">
+    <div class="pl">Polynomial-Time Construction</div>
+    Copy the graph: <span class="m">O(|V| + |E|)</span>. Compute <span class="m">|V| − k</span>: one subtraction, <span class="m">O(1)</span>. Total: <span class="m">O(|V| + |E|)</span> — linear in input size, clearly polynomial.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Scroll down to the <strong>★ Interactive Reduction Example</strong> at the bottom of Step 2. It has a Vertex Cover k input on the left and the derived IS k′ = |V| − k on the right. The default shows |V|=6, k=2, k′=4.
+  </div>
+
+  <div class="sp">
+    For example, with 6 vertices and Vertex Cover target <span class="m">k = 2</span>, the reduction gives Independent Set target <span class="m">k' = 6 − 2 = 4</span>. Same graph — just a new parameter.
+  </div>
+</div>
+
+<hr/>
+
+<!-- 5B -->
+<div class="sec" id="s5b">
+  <div class="sh"><span class="ctag">CLO 5B</span><span class="st">Reduction Correctness — Both Directions</span><span class="mp">10 / 10 marks</span></div>
+  <div class="pb">🔐 <span class="arrow">Stay on</span> <strong>NP-Completeness</strong> tab → Step 2 → scroll to sections <strong>2b</strong> and <strong>2c</strong></div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Point to the <strong>"Core Claim of the Reduction" box</strong> — the large ⟺ biconditional statement displayed prominently in Step 2.
+  </div>
+
+  <div class="sp">
+    Now I prove the reduction correct in both directions. The claim is: <span class="m">G</span> has a vertex cover of size at most <span class="m">k</span> &nbsp;⟺&nbsp; <span class="m">G</span> has an independent set of size at least <span class="m">|V| − k</span>.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Scroll to <strong>section 2b — "VC YES means IS YES"</strong>.
+  </div>
+
+  <div class="sp">
+    <strong>Forward direction.</strong> Suppose Vertex Cover is YES — so there exists <span class="m">C ⊆ V</span> with <span class="m">|C| ≤ k</span> and every edge has an endpoint in <span class="m">C</span>. Define <span class="m">S = V ∖ C</span>.
+    <br><br>
+    Suppose <span class="m">S</span> is not independent — then two vertices <span class="m">u, v ∈ S</span> share an edge. But both are outside <span class="m">C</span>, so that edge has no endpoint in <span class="m">C</span>. This contradicts <span class="m">C</span> being a vertex cover. Therefore <span class="m">S</span> must be independent. Its size: <span class="m">|S| = |V| − |C| ≥ |V| − k</span>. Independent Set is YES. ⟹ proved.
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Scroll to <strong>section 2c — "IS YES means VC YES"</strong>.
+  </div>
+
+  <div class="sp">
+    <strong>Backward direction.</strong> Suppose Independent Set is YES — so there exists <span class="m">S ⊆ V</span> with <span class="m">|S| ≥ |V| − k</span> and no two vertices in <span class="m">S</span> share an edge. Define <span class="m">C = V ∖ S</span>.
+    <br><br>
+    Take any edge <span class="m">(u, v)</span> in the graph. Since <span class="m">S</span> is an independent set by assumption, <span class="m">u</span> and <span class="m">v</span> cannot both be in <span class="m">S</span>. So at least one must lie in <span class="m">V ∖ S = C</span>. This holds for every edge — so <span class="m">C</span> is a valid vertex cover. Its size: <span class="m">|C| = |V| − |S| ≤ k</span>. Vertex Cover is YES. ⟸ proved.
+  </div>
+
+  <div class="pf">
+    <div class="pl">NP-Completeness Conclusion</div>
+    The reduction is correct in both directions and runs in polynomial time. Since Vertex Cover is NP-complete and reduces to Independent Set, Independent Set is NP-hard. Since it is also in NP — <strong>Independent Set is NP-complete. ∎</strong>
+  </div>
+
+  <div class="ptr"><span class="pi">👆</span>
+    Scroll to the <strong>Conclusion box</strong> at the very bottom of the NP-Completeness page — it shows the full logical chain: Step 1 (NP) + Step 2 (NP-hard) → NP-complete.
+  </div>
+
+  <div class="sp">
+    Edge cases my tool handles: if <span class="m">k = 0</span> the answer is always YES — the empty set is independent. If <span class="m">k > |V|</span> the answer is NO. If the graph has no edges, all vertices form an independent set. If the graph is complete, the maximum independent set has size 1.
+  </div>
+</div>
+
+<hr/>
+
+<!-- CLOSING -->
+<div class="sec" id="close">
+  <div class="sh"><span class="ctag">Closing</span><span class="st">Summary</span></div>
+  <div class="pb">🔐 <span class="arrow">Stay on</span> <strong>NP-Completeness</strong> tab — Conclusion box on screen</div>
+  <div class="tip">💡 Say this from memory if possible. Make eye contact. End with a clear confident "Thank you" — do not trail off.</div>
+
+  <div class="sp">
+    To summarize: Independent Set asks whether we can choose at least <span class="m">k</span> non-adjacent vertices in a graph. My tool demonstrates brute force as an exact exponential algorithm and greedy as a fast practical heuristic. Brute force is always correct but slow; greedy is fast but not always optimal.
+    <br><br>
+    I proved Independent Set is in NP using an <span class="m">O(n²)</span> verifier. I proved NP-hardness by reducing from Vertex Cover using the mapping <span class="m">(G, k) → (G, |V| − k)</span>. The reduction is polynomial and correct in both directions — therefore Independent Set is NP-complete.
+    <br><br>
+    Thank you.
+  </div>
+</div>
+
+</main>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const t=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('bar').style.width=(window.scrollY/t*100)+'%';
+});
+function go(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');}),{threshold:.07});
+document.querySelectorAll('.sec').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
